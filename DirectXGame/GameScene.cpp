@@ -28,16 +28,16 @@ void GameScene::Initialize() {
 	// 3Dモデルデータの生成
 	model_=Model::CreateFromOBJ("block", true);
 	// ビュープロジェクションの初期化
-	camera_.translation_.y = 5.0f;
-	camera_.rotation_.x = 0.1f;
-	camera_.translation_.z = -5.0f;
-	camera_.translation_.x = 5.0f;
+	camera_.translation_.y = 15.0f;
+	camera_.rotation_.x = 1.06f;
+	camera_.translation_.z = -2.5f;
+	camera_.translation_.x = 5.5f;
 	camera_.Initialize();
 
 	worldTransform_.Initialize();
 
 	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/blocks_csv/blocks.csv");
+	mapChipField_->LoadMapChipCsv("Resources/blocks_csv/Stage.csv");
 
 	GenerateBlocks();
 }
