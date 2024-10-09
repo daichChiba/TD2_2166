@@ -2,6 +2,8 @@
 
 #include<KamataEngine.h>
 #include <vector>
+#include "MapChipField.h"
+
 
 using namespace KamataEngine ;
 /// <summary>
@@ -24,6 +26,9 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize();
+
+		
+	void GenerateBlocks();
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -53,5 +58,18 @@ private: // メンバ変数
 	// カメラ
 	Camera camera_;
 
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+
+	// マップチップフィールド
+	MapChipField* mapChipField_;
+
+	// デバックカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	// デバックカメラ
+	DebugCamera* debugCamera_ = nullptr;
+
+	//トランスフォーム
+	WorldTransform worldTransform_;
 };
 
