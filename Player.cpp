@@ -472,8 +472,3 @@ AABB Player::GetAABB() {
 	return aabb;
 }
 
-void Player::OnCollision(const Enemy* enemy) { 
-	(void)enemy;
-	// デスフラグを立てる
-	isDead_ = true;
-}

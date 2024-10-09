@@ -13,7 +13,6 @@
 #include "Skydome.h"
 #include "MapChipField.h"
 #include "CameraController.h"
-#include "Enemy.h"
 #include "DeathParticles.h"
 
 /// <summary>
@@ -85,8 +84,6 @@ private: // メンバ変数
 
 	std::vector <std::vector< WorldTransform* >> worldTransformBlocks_;
 
-	// エネミー
-	std::list<Enemy*> enemies_;
 
 	// エネミーモデル
 	Model* enemyModel_;

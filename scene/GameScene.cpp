@@ -31,9 +31,6 @@ GameScene::~GameScene() {
 
 	delete cameraController_;
 
-	for (Enemy* enemy:enemies_) {
-		delete enemy;
-	}
 
 	if(isDeathParticle){
 		delete deathParticles_;
@@ -119,13 +116,6 @@ void GameScene::Initialize() {
 	//enemy_ = new Enemy;
 	//enemy_->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 
-	for (int32_t i = 0; i < 3; ++i) {
-		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = {10 + i * 4.0f, 1, 0};
-		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
-
-		enemies_.push_back(newEnemy);
-	}
 
 	//	仮の生成処理。後で消す。
 	deathParticles_ = new DeathParticles;
@@ -203,9 +193,6 @@ void GameScene::Draw() {
 			model3d_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
-	for (Enemy* enemy : enemies_) {
-		enemy->Draw();
-	}
 
 	if (isDeathParticle) {
 		deathParticles_->Draw();
@@ -232,27 +219,7 @@ void GameScene::Draw() {
 
 void GameScene::CheckAllCollisions() {
 	#pragma region 自キャラと敵キャラの当たり判定
-	{
-		//判定対象1と2の座標
-		AABB aabb1, aabb2;
 
-		//自キャラの座標
-		aabb1 = player_->GetAABB();
-
-		//自キャラと敵弾すべての当たり判定
-		for (Enemy*enemy:enemies_) {
-			aabb2 = enemy->GetAABB();
-
-			// AABB同士の交差判定
-			if (IsCollision(aabb1, aabb2)) {
-				// 自キャラの衝突時コールバックを呼び出す
-				player_->OnCollision(enemy);
-				// 敵弾の衝突時コールバックを呼び出す
-				enemy->OnCollision(player_);
-			}
-
-		}
-	}
 	#pragma endregion
 
 }
@@ -264,10 +231,6 @@ void GameScene::ChangePhase() {
 	case GameScene::Phase::kPlay:
 		// 自キャラの更新
 		player_->Update();
-		// 敵キャラの更新
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		}
 		CheckAllCollisions();
 
 		// ブロックの更新
@@ -325,9 +288,6 @@ void GameScene::ChangePhase() {
 
 		break;
 	case GameScene::Phase::kDeath:
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		}
 
 		// ブロックの更新
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
