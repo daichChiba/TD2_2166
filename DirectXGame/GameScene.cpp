@@ -28,6 +28,10 @@ void GameScene::Initialize() {
 	// 3Dモデルデータの生成
 	model_=Model::CreateFromOBJ("block", true);
 	// ビュープロジェクションの初期化
+	camera_.translation_.y = 5.0f;
+	camera_.rotation_.x = 0.1f;
+	camera_.translation_.z = -5.0f;
+	camera_.translation_.x = 5.0f;
 	camera_.Initialize();
 
 	worldTransform_.Initialize();
@@ -58,7 +62,11 @@ void GameScene::GenerateBlocks() {
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				worldTransformBlocks_[i][j] = new WorldTransform();
 				worldTransformBlocks_[i][j]->Initialize();
-				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+				//worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+				worldTransformBlocks_[i][j]->translation_.x = static_cast<float>(j);
+				worldTransformBlocks_[i][j]->translation_.z = static_cast<float>(i);
+
+
 			}
 		}
 	}
