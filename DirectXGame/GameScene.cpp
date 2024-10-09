@@ -26,16 +26,16 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	// 3Dモデルデータの生成
-	model_->Model::CreateFromOBJ("block", true);
+	model_=Model::CreateFromOBJ("block", true);
 	// ビュープロジェクションの初期化
 	camera_.Initialize();
 
 	worldTransform_.Initialize();
 
-	//mapChipField_ = new MapChipField;
-	//mapChipField_->LoadMapChipCsv("Resources/blocks_csv/blocks.csv");
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/blocks_csv/blocks.csv");
 
-	//GenerateBlocks();
+	GenerateBlocks();
 }
 
 void GameScene::GenerateBlocks() {
@@ -65,6 +65,18 @@ void GameScene::GenerateBlocks() {
 }
 
 void GameScene::Update() {
+			// ブロックの更新
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+				// 04/24 02_02の更新から始める
+
+				if (!worldTransformBlock) {
+					continue;
+				}
+
+				worldTransformBlock->UpdateMatrix();
+			}
+		}
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_0)) {
 		isDebugCameraActive_ = !isDebugCameraActive_;
@@ -117,15 +129,15 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	//for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-	//	for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-	//		if (!worldTransformBlock) {
-	//			continue;
-	//		}
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock) {
+				continue;
+			}
 
-	//		model_->Draw(*worldTransformBlock, camera_);
-	//	}
-	//}
+			model_->Draw(*worldTransformBlock, camera_);
+		}
+	}
 	//model_->Draw(worldTransform_, camera_);
 
 	// 3Dオブジェクト描画後処理
