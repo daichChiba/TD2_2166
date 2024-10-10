@@ -1,12 +1,11 @@
 #pragma once
 
-#include<KamataEngine.h>
-#include <vector>
 #include "MapChipField.h"
-#include "Player.h"
+#include <KamataEngine.h>
+#include <vector>
+#include"Player.h"
 
-
-using namespace KamataEngine ;
+using namespace KamataEngine;
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -28,7 +27,6 @@ public: // メンバ関数
 	/// </summary>
 	void Initialize();
 
-		
 	void GenerateBlocks();
 
 	/// <summary>
@@ -51,7 +49,7 @@ private: // メンバ変数
 	/// </summary>
 
 	//// テクスチャハンドル
-	//uint32_t textureHandle_ = 0;
+	// uint32_t textureHandle_ = 0;
 
 	// 3Dモデルデータ
 	Model* model_ = nullptr;
@@ -70,14 +68,12 @@ private: // メンバ変数
 	// デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	//トランスフォーム
+	// トランスフォーム
 	WorldTransform worldTransform_;
 
 	//player
 	Player* player_ = nullptr;
 
-	////playerModel
-	//Model*
-
+	//playerModel
+	Model* ModelPlayer_ = nullptr;
 };
-

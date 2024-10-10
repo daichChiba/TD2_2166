@@ -1,3 +1,4 @@
+
 #include "GameScene.h"
 #include <cassert>
 
@@ -26,12 +27,11 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	// 3Dモデルデータの生成
-	model_=Model::CreateFromOBJ("block", true);
-	// カメラ初期化
-	//カメラの位置を変える
-	camera_.translation_.y = 15.6f;
-	camera_.rotation_.x = 1.03f;
-	camera_.translation_.z = 1.0f;
+	model_ = Model::CreateFromOBJ("block", true);
+	// ビュープロジェクションの初期化
+	camera_.translation_.y = 15.0f;
+	camera_.rotation_.x = 1.06f;
+	camera_.translation_.z = -2.5f;
 	camera_.translation_.x = 5.5f;
 	camera_.Initialize();
 
@@ -41,6 +41,8 @@ void GameScene::Initialize() {
 	mapChipField_->LoadMapChipCsv("Resources/blocks_csv/Stage.csv");
 
 	GenerateBlocks();
+
+	//player_->Initialize()
 }
 
 void GameScene::GenerateBlocks() {
@@ -63,30 +65,27 @@ void GameScene::GenerateBlocks() {
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				worldTransformBlocks_[i][j] = new WorldTransform();
 				worldTransformBlocks_[i][j]->Initialize();
-				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
-				//worldTransformBlocks_[i][j]->translation_.x = static_cast<float>(j);
-				//worldTransformBlocks_[i][j]->translation_.z = static_cast<float>(i);
-
-
+				// worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+				worldTransformBlocks_[i][j]->translation_.x = static_cast<float>(j);
+				worldTransformBlocks_[i][j]->translation_.z = static_cast<float>(i);
 			}
 		}
 	}
 }
 
 void GameScene::Update() {
+	// ブロックの更新
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			// 04/24 02_02の更新から始める
 
-			// ブロックの更新
-		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-				// 04/24 02_02の更新から始める
-
-				if (!worldTransformBlock) {
-					continue;
-				}
-
-				worldTransformBlock->UpdateMatrix();
+			if (!worldTransformBlock) {
+				continue;
 			}
+
+			worldTransformBlock->UpdateMatrix();
 		}
+	}
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_0)) {
 		isDebugCameraActive_ = !isDebugCameraActive_;
@@ -101,12 +100,12 @@ void GameScene::Update() {
 		// デバックカメラのプロジェクション行列
 		camera_.matProjection = debugCamera_->GetCamera().matProjection;
 	} else {
-		//cameraController_->Update();
+		// cameraController_->Update();
 
 		//// ビュープロジェクション行列の更新と転送
-		//camera_.matView = cameraController_->GetViewProjection().matView;
-		//camera_.matProjection = cameraController_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
+		// camera_.matView = cameraController_->GetViewProjection().matView;
+		// camera_.matProjection = cameraController_->GetViewProjection().matProjection;
+		//  ビュープロジェクション行列の転送
 		camera_.TransferMatrix();
 	}
 	worldTransform_.TransferMatrix();
@@ -148,7 +147,7 @@ void GameScene::Draw() {
 			model_->Draw(*worldTransformBlock, camera_);
 		}
 	}
-	//model_->Draw(worldTransform_, camera_);
+	// model_->Draw(worldTransform_, camera_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
