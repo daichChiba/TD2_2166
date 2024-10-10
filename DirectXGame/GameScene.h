@@ -3,7 +3,6 @@
 #include<KamataEngine.h>
 #include <vector>
 #include "MapChipField.h"
-#include "Player.h"
 
 
 using namespace KamataEngine ;
@@ -72,12 +71,5 @@ private: // メンバ変数
 
 	//トランスフォーム
 	WorldTransform worldTransform_;
-
-	//player
-	Player* player_ = nullptr;
-
-	////playerModel
-	//Model*
-
 };
 

@@ -27,11 +27,10 @@ void GameScene::Initialize() {
 
 	// 3Dモデルデータの生成
 	model_=Model::CreateFromOBJ("block", true);
-	// カメラ初期化
-	//カメラの位置を変える
-	camera_.translation_.y = 15.6f;
-	camera_.rotation_.x = 1.03f;
-	camera_.translation_.z = 1.0f;
+	// ビュープロジェクションの初期化
+	camera_.translation_.y = 15.0f;
+	camera_.rotation_.x = 1.06f;
+	camera_.translation_.z = -2.5f;
 	camera_.translation_.x = 5.5f;
 	camera_.Initialize();
 
@@ -63,9 +62,9 @@ void GameScene::GenerateBlocks() {
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				worldTransformBlocks_[i][j] = new WorldTransform();
 				worldTransformBlocks_[i][j]->Initialize();
-				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
-				//worldTransformBlocks_[i][j]->translation_.x = static_cast<float>(j);
-				//worldTransformBlocks_[i][j]->translation_.z = static_cast<float>(i);
+				//worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+				worldTransformBlocks_[i][j]->translation_.x = static_cast<float>(j);
+				worldTransformBlocks_[i][j]->translation_.z = static_cast<float>(i);
 
 
 			}
@@ -74,7 +73,6 @@ void GameScene::GenerateBlocks() {
 }
 
 void GameScene::Update() {
-
 			// ブロックの更新
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
