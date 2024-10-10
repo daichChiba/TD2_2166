@@ -15,6 +15,10 @@ GameScene::~GameScene() {
 	worldTransformBlocks_.clear();
 	// 3Dモデルデータの解放
 	delete model_;
+
+	delete player_;
+
+	delete ModelPlayer_;
 }
 
 void GameScene::Initialize() {
@@ -28,10 +32,14 @@ void GameScene::Initialize() {
 
 	// 3Dモデルデータの生成
 	model_ = Model::CreateFromOBJ("block", true);
-	// ビュープロジェクションの初期化
-	camera_.translation_.y = 15.0f;
-	camera_.rotation_.x = 1.06f;
-	camera_.translation_.z = -2.5f;
+	// playerModelの作成
+	ModelPlayer_ = Model::CreateFromOBJ("player", true);
+
+	// カメラ初期化
+	// カメラの位置を変える
+	camera_.translation_.y = 17.6f;
+	camera_.rotation_.x = 1.25f;
+	camera_.translation_.z = 1.0f;
 	camera_.translation_.x = 5.5f;
 	camera_.Initialize();
 
@@ -40,9 +48,16 @@ void GameScene::Initialize() {
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks_csv/Stage.csv");
 
-	GenerateBlocks();
 
-	//player_->Initialize()
+
+	player_ = new Player; //
+	// 座標をマップチップ番号で指定
+	Vector3 playerPosition = {
+	    static_cast<float>(6), 0, static_cast<float>(8)
+	};
+	player_->Initialize(ModelPlayer_, &camera_, playerPosition);
+	//player_->SetMapChipField(mapChipField_);
+	GenerateBlocks();
 }
 
 void GameScene::GenerateBlocks() {
@@ -74,6 +89,7 @@ void GameScene::GenerateBlocks() {
 }
 
 void GameScene::Update() {
+	player_->Update();
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -145,6 +161,7 @@ void GameScene::Draw() {
 			}
 
 			model_->Draw(*worldTransformBlock, camera_);
+			player_->Draw();
 		}
 	}
 	// model_->Draw(worldTransform_, camera_);
