@@ -79,6 +79,8 @@ void GameScene::Initialize() {
 	viewProjection_.farZ = 600;
 	viewProjection_.Initialize();
 
+
+
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
