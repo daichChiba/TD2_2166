@@ -53,10 +53,10 @@ void GameScene::Initialize() {
 	player_ = new Player; //
 	// 座標をマップチップ番号で指定
 	Vector3 playerPosition = {
-	    static_cast<float>(6), 0, static_cast<float>(8)
+	    static_cast<float>(5), 0, static_cast<float>(6)
 	};
 	player_->Initialize(ModelPlayer_, &camera_, playerPosition);
-	//player_->SetMapChipField(mapChipField_);
+	player_->SetMapChipField(mapChipField_);
 	GenerateBlocks();
 }
 
@@ -181,5 +181,35 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
+#pragma endregion
+}
+
+void GameScene::CheckAllCollisions() {
+#pragma region 自キャラと敵キャラの当たり判定
+	//{
+	//	// 判定対象1と2の座標
+	//	AABB aabb1, aabb2;
+
+	//	// 自キャラの座標
+	//	aabb1 = player_->GetAABB();
+
+	//	// 要素数
+	//	uint32_t kNumBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	//	uint32_t kNumBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	//	// 自キャラと敵弾すべての当たり判定
+	//	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	//		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
+	//			aabb2=
+	//			// AABB同士の交差判定
+	//			if (IsCollision(aabb1, aabb2)) {
+	//				// 自キャラの衝突時コールバックを呼び出す
+	//				player_->OnCollision(mapChipField_);
+	//				// 敵弾の衝突時コールバックを呼び出す
+	//				mapChipField_->OnCollision(player_);
+	//			}
+	//		}
+	//	}
+	//}
 #pragma endregion
 }

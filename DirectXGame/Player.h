@@ -3,6 +3,7 @@
 using namespace KamataEngine;
 #include "AABB.h"
 #include "MapChipField.h"
+#include"MathUtilityForText.h"
 class MapChipField;
 
 enum class LRDirection { kRight, kLeft };
@@ -52,6 +53,32 @@ public:
 
 
 	void InputMove();
+	
+	void AnimateTurn();
+
+	//void CheckMapCollision(CollisionMapInfo& info);
+	//void CheckMapCollisionUp(CollisionMapInfo& info);
+	//void CheckMapCollisionDown(CollisionMapInfo& info);
+	//void CheckMapCollisionRight(CollisionMapInfo& info);
+	//void CheckMapCollisionLeft(CollisionMapInfo& info);
+
+	//Vector3 CornerPosition(const Vector3& center, Corner corner);
+	//void isHitCeiling(const CollisionMapInfo& info);
+
+	//void collisionHitMove(const CollisionMapInfo& info);
+
+	//void landingSwitch(const CollisionMapInfo& info);
+
+	//void isHitWall(const CollisionMapInfo& info);
+
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	// AABBを取得
+	AABB GetAABB();
+
+	//// 衝突応答
+	//void OnCollision(const MapChipField* mapchipField);
 
 
 	private:
@@ -70,11 +97,8 @@ public:
 	// マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
 
-	Vector3 velocity_ = {};
-
-	static inline const float kAcceleration = 0.01f;
-	static inline const float kAttenuation = 0.005f;
-	static inline const float kLimitRunSpeed = 0.5f;
+	//
+	Vector3 velocity_ = {0.1f, 0.1f, 0.1f};
 
 	// 旋回開始の角度
 	float turnFirstRotationY_ = 0.0f;
@@ -83,6 +107,13 @@ public:
 	// 旋回時間<秒>
 	static inline const float kTimeTurn = 0.3f;
 
-	// 設置状況フラグ
-	bool onGround_ = true;
+	//	キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	static inline const float kBlank = 2.0f;
+
+	static inline const float kAttenuationWall = 0.1f;
+
+	//bool isBlockHit_=false;
 };

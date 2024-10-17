@@ -8,11 +8,15 @@ using namespace KamataEngine;
 #include <fstream>
 #include <sstream>
 #include <assert.h>
+#include "AABB.h"
+
 /// <summary>
 /// マップチップフィールド
 /// </summary>
 
-enum class MapChipType {
+class Player;
+
+	enum class MapChipType {
 	kBlank, // 　空白
 	kBlock, // 　ブロック
 };
@@ -23,6 +27,7 @@ struct MapChipDate {
 
 class MapChipField {
 public:
+
 	struct IndexSet {
 		uint32_t xIndex;
 		uint32_t yIndex;
@@ -49,6 +54,11 @@ public:
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
 	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
+
+	//// AABBを取得
+	//AABB GetAABB();
+
+	//void OnCollision(const Player* player_);
 
 private:
 	// 1ブロックのサイズ

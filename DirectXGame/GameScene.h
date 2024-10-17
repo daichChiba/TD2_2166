@@ -76,4 +76,7 @@ private: // メンバ変数
 
 	//playerModel
 	Model* ModelPlayer_ = nullptr;
+
+	// すべての当たり判定を行う
+	void CheckAllCollisions();
 };

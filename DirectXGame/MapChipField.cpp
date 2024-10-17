@@ -81,3 +81,16 @@ MapChipField ::Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yInde
 
 	return rect;
 }
+
+//AABB MapChipField::GetAABB() {
+//	Vector3 worldPos = GetWorldPosition();
+//	AABB aabb;
+//	aabb.min = {worldPos.x - kBlockWidth_ / 2.0f, worldPos.y - kBlockHeight_ / 2.0f, worldPos.z - kBlockHeight_ / 2.0f};
+//	aabb.max = {worldPos.x + kBlockWidth_ / 2.0f, worldPos.y + kBlockHeight_ / 2.0f, worldPos.z + kBlockHeight_ / 2.0f};
+//
+//	return aabb;
+//}
+//
+//void MapChipField::OnCollision(const Player* player_) {
+//	(void)player_;
+//}
