@@ -39,13 +39,13 @@ private:
 	bool finished_ = false;
 
 	Model* modelFont_ = nullptr;
-	Model* modelPlayer_ = nullptr;
+	Model* modelSpace_ = nullptr;
 
 	// ビュープロジェクション
 	Camera camera_;
 
 	WorldTransform worldTransformFont_;
-	WorldTransform worldTransformPlayer_;
+	WorldTransform worldTransformSpace_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;

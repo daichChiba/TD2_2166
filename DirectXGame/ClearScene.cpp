@@ -5,6 +5,7 @@ ClearScene::ClearScene() {}
 
 ClearScene::~ClearScene() {
 	delete modelFont_;
+	delete modelSpace_;
 }
 
 void ClearScene::Initialize() {
@@ -16,11 +17,15 @@ void ClearScene::Initialize() {
 	camera_.Initialize();
 
 	modelFont_ = Model::CreateFromOBJ("clearFont");
+	modelSpace_ = Model::CreateFromOBJ("push_Space");
 
 	worldTransformFont_.Initialize();
+	worldTransformSpace_.Initialize();
 
 	worldTransformFont_.translation_.y = 10;
+	worldTransformSpace_.translation_.y = -8;
 	worldTransformFont_.scale_ = {2, 2, 2};
+	worldTransformSpace_.scale_ = {2, 2, 2};
 }
 
 void ClearScene::Update() {
@@ -33,6 +38,7 @@ void ClearScene::Update() {
 
 	// 行列を更新
 	worldTransformFont_.UpdateMatrix();
+	worldTransformSpace_.UpdateMatrix();
 }
 
 void ClearScene::Draw() {
@@ -44,6 +50,7 @@ void ClearScene::Draw() {
 
 	// ここに3Dオブジェクトの描画処理を追加できる
 	modelFont_->Draw(worldTransformFont_, camera_);
+	modelSpace_->Draw(worldTransformSpace_, camera_);
 
 	// 3Dオブジェクト描画処理後
 	Model::PostDraw();

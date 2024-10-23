@@ -34,11 +34,14 @@ public:
 
 private:
 	Model* modelFont_ = nullptr;
+	Model* modelSpace_ = nullptr;
 
 	// ビュープロジェクション
 	Camera camera_;
 
 	WorldTransform worldTransformFont_;
+	WorldTransform worldTransformSpace_;
+
 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
