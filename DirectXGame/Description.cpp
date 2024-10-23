@@ -21,9 +21,9 @@ void Description::Initialize() {
 	worldTransformDescription_.Initialize();
 	worldTransformSpace_.Initialize();
 
-	worldTransformDescription_.translation_.y = 10;
+	worldTransformDescription_.translation_.y = 7;
 	worldTransformSpace_.translation_.y = -10;
-	worldTransformDescription_.scale_ = {2, 2, 2};
+	worldTransformDescription_.scale_ = {5, 5, 5};
 	worldTransformSpace_.scale_ = {2, 2, 2};
 }
 
