@@ -4,11 +4,13 @@ using namespace KamataEngine;
 #include "ClearScene.h"
 #include "GameScene.h"
 #include "TitleScene.h"
+#include "Description.h"
 
 // シーン（型）
 enum class Scene {
 	kUnknown = 0,
 	kTitle,
+	kDescription,
 	kGame,
 	kClear,
 };
@@ -23,6 +25,7 @@ void DrawScene();
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
 ClearScene* clearScene = nullptr;
+Description* descriptionScene = nullptr;
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -113,6 +116,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	delete gameScene;
 	delete titleScene;
 	delete clearScene;
+	delete descriptionScene;
 
 	// 3Dモデル解放
 	Model::StaticFinalize();
@@ -131,14 +135,37 @@ void ChangeScene() {
 	switch (scene) {
 	case Scene::kTitle:
 		if (titleScene->IsFinished()) {
+			if (titleScene->GetPushSpace()==true) {
+				// シーン変更
+				scene = Scene::kGame;
+				// 旧シーンの開放
+				delete titleScene;
+				titleScene = nullptr;
+				// 新シーンの生成と初期化
+				gameScene = new GameScene;
+				gameScene->Initialize();
+			}else{
+				// シーン変更
+				scene = Scene::kDescription;
+				// 旧シーンの開放
+				delete titleScene;
+				titleScene = nullptr;
+				// 新シーンの生成と初期化
+				descriptionScene = new Description;
+				descriptionScene->Initialize();
+			}
+		}
+		break;
+	case Scene::kDescription:
+		if (descriptionScene->IsFinished()) {
 			// シーン変更
-			 scene = Scene::kGame;
+			scene = Scene::kTitle;
 			// 旧シーンの開放
-			delete titleScene;
-			titleScene = nullptr;
+			delete descriptionScene;
+			descriptionScene = nullptr;
 			// 新シーンの生成と初期化
-			 gameScene = new GameScene;
-			 gameScene->Initialize();
+			titleScene = new TitleScene;
+			titleScene->Initialize();
 		}
 		break;
 	case Scene::kGame:
@@ -175,6 +202,9 @@ void UpdateScene() {
 	case Scene::kTitle:
 		titleScene->Update();
 		break;
+	case Scene::kDescription:
+		descriptionScene->Update();
+		break;
 	case Scene::kGame:
 		gameScene->Update();
 		break;
@@ -189,6 +219,9 @@ void DrawScene() {
 	switch (scene) {
 	case Scene::kTitle:
 		titleScene->Draw();
+		break;
+	case Scene::kDescription:
+		descriptionScene->Draw();
 		break;
 	case Scene::kGame:
 		gameScene->Draw();

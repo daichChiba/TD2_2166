@@ -34,18 +34,24 @@ public:
 	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
+	bool GetPushSpace() { return pushSpace; }
+
 private:
 	//終了フラグ
 	bool finished_ = false;
 
 	Model* modelFont_ = nullptr;
 	Model* modelSpace_ = nullptr;
+	Model* modelEnter_ = nullptr;
+	Model* modelDescription_ = nullptr;
 
 	// ビュープロジェクション
 	Camera camera_;
 
 	WorldTransform worldTransformFont_;
 	WorldTransform worldTransformSpace_;
+	WorldTransform worldTransformEnter_;
+	WorldTransform worldTransformDescription_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -53,4 +59,6 @@ private:
 
 	float timer_ = 0.0f;
 	static inline const float kMotionTime = 1.0f;
+
+	bool pushSpace = false;
 };

@@ -108,6 +108,7 @@
   <ItemGroup>
     <ClCompile Include="Botton.cpp" />
     <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="Description.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GoalParticles.cpp" />
     <ClCompile Include="InputEx.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Botton.h" />
     <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="Description.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GoalParticles.h" />
     <ClInclude Include="MapChipField.h" />
