@@ -25,10 +25,18 @@ void Description::Initialize() {
 	worldTransformSpace_.translation_.y = -10;
 	worldTransformDescription_.scale_ = {5, 5, 5};
 	worldTransformSpace_.scale_ = {2, 2, 2};
+	// サウンドデータの読み込み
+	soundDataHandle_ = audio_->LoadWave("Title.wav");
+	// 音声再生
+	audio_->PauseWave(soundDataHandle_);
+	// 第2引数でループ再生を指定
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 }
 
 void Description::Update() {
 	if (Input::GetInstance()->ReleseKey(DIK_RETURN)) {
+		// 音声停止
+		audio_->StopWave(voiceHandle_);
 		finished_ = true;
 	}
 	// タイマーを加算

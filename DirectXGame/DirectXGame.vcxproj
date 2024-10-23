@@ -109,6 +109,7 @@
     <ClCompile Include="Botton.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Description.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GoalParticles.cpp" />
     <ClCompile Include="InputEx.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Botton.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Description.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GoalParticles.h" />
     <ClInclude Include="MapChipField.h" />

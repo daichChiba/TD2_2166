@@ -97,6 +97,13 @@ void GameScene::Initialize() {
 	mirror_->Initialize(ModelPlayer_, &camera_, mirrorPos);
 	mirror_->SetMapChipField(mapChipField_);
 	GenerateBlocks();
+
+	// サウンドデータの読み込み
+	soundDataHandle_ = audio_->LoadWave("StageBgm.wav");
+	// 音声再生
+	audio_->PauseWave(soundDataHandle_);
+	// 第2引数でループ再生を指定
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 }
 
 void GameScene::GenerateBlocks() {
@@ -127,10 +134,7 @@ void GameScene::GenerateBlocks() {
 	}
 }
 
-void GameScene::Update() {
-
-	 ChangePhase();
-}
+void GameScene::Update() { ChangePhase(); }
 
 void GameScene::Draw() {
 
@@ -312,9 +316,12 @@ void GameScene::ChangePhase() {
 		}
 		worldTransform_.TransferMatrix();
 
-		//if (player_->IsAlive()==false && mirror_->IsAlive()==false) {
-			finished_ = true;
-		//}
+		finished_ = true;
+
+		if (finished_ == true) {
+			// 音声停止
+			audio_->StopWave(voiceHandle_);
+		}
 
 		break;
 	}

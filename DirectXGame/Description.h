@@ -45,6 +45,11 @@ private:
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	// サウドデータハンドル
+	uint32_t soundDataHandle_ = 0;
+	// 音声再生ハンドル
+	uint32_t voiceHandle_ = 0;
+
 	float timer_ = 0.0f;
 	static inline const float kMotionTime = 1.0f;
 };

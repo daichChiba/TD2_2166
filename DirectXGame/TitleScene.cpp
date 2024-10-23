@@ -8,6 +8,7 @@ TitleScene::~TitleScene() {
 	delete modelSpace_;
 	delete modelEnter_;
 	delete modelDescription_;
+	delete fade_;
 }
 
 void TitleScene::Initialize() {
@@ -16,9 +17,7 @@ void TitleScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-
-
-// ビュープロジェクション
+	// ビュープロジェクション
 	camera_.Initialize();
 
 	modelFont_ = Model::CreateFromOBJ("titleFont");
@@ -40,21 +39,42 @@ void TitleScene::Initialize() {
 	worldTransformSpace_.scale_ = {2, 2, 2};
 	worldTransformEnter_.scale_ = {2, 2, 2};
 	worldTransformDescription_.scale_ = {2, 2, 2};
+
+	// フェード
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1);
+
+		// サウンドデータの読み込み
+	soundDataHandle_ = audio_->LoadWave("Title.wav");
+	// 音声再生
+	audio_->PauseWave(soundDataHandle_);
+	// 第2引数でループ再生を指定
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+
 }
 
 void TitleScene::Update() {
 	if (Input::GetInstance()->ReleseKey(DIK_SPACE)) {
-		finished_ = true;
+		fade_->Start(Fade::Status::FadeOut, 1);
 		pushSpace = true;
 	}
 	if (Input::GetInstance()->ReleseKey(DIK_RETURN)) {
-		finished_ = true;
+		fade_->Start(Fade::Status::FadeOut, 1);
 		pushSpace = false;
 	}
+
+	// フェードアウトが終了したらゲームシーンに行く
+	if (fade_->IsFadeOutFinished() == true) {
+		// 音声停止
+		 audio_->StopWave(voiceHandle_);
+		finished_ = true;
+	}
+
 	// タイマーを加算
 	timer_ += 1.0f / 60.0f;
 
-	//worldTransformPlayer_.rotation_.y =
+	// worldTransformPlayer_.rotation_.y =
 	//	std::numbers::pi_v<float> + std::sin(std::numbers::pi_v<float> * 2.0f * timer_ / kMotionTime);
 
 	// 行列を更新
@@ -62,6 +82,9 @@ void TitleScene::Update() {
 	worldTransformSpace_.UpdateMatrix();
 	worldTransformEnter_.UpdateMatrix();
 	worldTransformDescription_.UpdateMatrix();
+
+	// フェード
+	fade_->Update();
 }
 
 void TitleScene::Draw() {
@@ -79,4 +102,7 @@ void TitleScene::Draw() {
 
 	// 3Dオブジェクト描画処理後
 	Model::PostDraw();
+
+	// フェード
+	fade_->Draw(commandList);
 }
