@@ -19,6 +19,11 @@ public:
 	void Initialize();
 
 	/// <summary>
+	/// 行列を転送する
+	/// </summary>
+	void TransferMatrix();
+
+	/// <summary>
 	/// グラフィックスコマンドを積む
 	/// </summary>
 	/// <param name="commandList">コマンドリスト</param>

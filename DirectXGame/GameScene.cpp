@@ -19,6 +19,22 @@ GameScene::~GameScene() {
 	delete player_;
 
 	delete ModelPlayer_;
+
+	delete botton_;
+
+	delete ModelBotton_;
+
+	delete mirror_;
+
+	delete modelSkydome_;
+
+	delete skydome_;
+
+	// delete modelGoalParticle_;
+
+	// for (GoalParticles* GoalParticles : goalPartiy_) {
+	//	delete GoalParticles;
+	// }
 }
 
 void GameScene::Initialize() {
@@ -26,37 +42,60 @@ void GameScene::Initialize() {
 	//// ファイル名を指定してテクスチャを読み込む
 	// textureHandle_ = TextureManager::Load("mario.jpg");
 
+	// ゲームプレイフェーズから開始
+	phase_ = Phase::kPlay;
+
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	// スカイドームの生成
+	skydome_ = new Skydome();
 
 	// 3Dモデルデータの生成
 	model_ = Model::CreateFromOBJ("block", true);
 	// playerModelの作成
 	ModelPlayer_ = Model::CreateFromOBJ("player", true);
+	// bottonModelの作成
+	ModelBotton_ = Model::CreateFromOBJ("switch", true);
+	// 3Dモデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// カメラ初期化
 	// カメラの位置を変える
 	camera_.translation_.y = 17.6f;
-	camera_.rotation_.x = 1.25f;
+	camera_.rotation_.x = 1.28f;
 	camera_.translation_.z = 1.0f;
 	camera_.translation_.x = 5.5f;
+	camera_.farZ;
 	camera_.Initialize();
+
+	// スカイドームの初期化
+	skydome_->Initialize(modelSkydome_, &camera_);
 
 	worldTransform_.Initialize();
 
 	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/blocks_csv/Stage.csv");
 
+	mapChipField_->LoadMapChipCsv("Resources/blocks_csv/1stStage.csv");
 
+	// modelGoalParticle_ = Model::CreateFromOBJ("DeathParticle", true);
 
 	player_ = new Player; //
 	// 座標をマップチップ番号で指定
-	Vector3 playerPosition = {
-	    static_cast<float>(5), 0, static_cast<float>(6)
-	};
+	Vector3 playerPosition = {static_cast<float>(1), 0, static_cast<float>(1)};
 	player_->Initialize(ModelPlayer_, &camera_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
+	botton_ = new Botton;
+	Vector3 bottonPos = {static_cast<float>(7), 0, static_cast<float>(6)};
+	botton_->Initialize(ModelBotton_, &camera_, bottonPos);
+	botton2_ = new Botton;
+	Vector3 botton2Pos = {static_cast<float>(4), 0, static_cast<float>(8)};
+	botton2_->Initialize(ModelBotton_, &camera_, botton2Pos);
+	mirror_ = new Mirror;
+	Vector3 mirrorPos = {static_cast<float>(13), 0, static_cast<float>(13)};
+	mirror_->Initialize(ModelPlayer_, &camera_, mirrorPos);
+	mirror_->SetMapChipField(mapChipField_);
 	GenerateBlocks();
 }
 
@@ -89,42 +128,8 @@ void GameScene::GenerateBlocks() {
 }
 
 void GameScene::Update() {
-	player_->Update();
-	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			// 04/24 02_02の更新から始める
 
-			if (!worldTransformBlock) {
-				continue;
-			}
-
-			worldTransformBlock->UpdateMatrix();
-		}
-	}
-#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_0)) {
-		isDebugCameraActive_ = !isDebugCameraActive_;
-	}
-#endif // DEBUG
-       // カメラの処理
-	if (isDebugCameraActive_) {
-		debugCamera_->Update();
-
-		// デバックカメラのビュー行列
-		camera_.matView = debugCamera_->GetCamera().matView;
-		// デバックカメラのプロジェクション行列
-		camera_.matProjection = debugCamera_->GetCamera().matProjection;
-	} else {
-		// cameraController_->Update();
-
-		//// ビュープロジェクション行列の更新と転送
-		// camera_.matView = cameraController_->GetViewProjection().matView;
-		// camera_.matProjection = cameraController_->GetViewProjection().matProjection;
-		//  ビュープロジェクション行列の転送
-		camera_.TransferMatrix();
-	}
-	worldTransform_.TransferMatrix();
+	 ChangePhase();
 }
 
 void GameScene::Draw() {
@@ -162,6 +167,11 @@ void GameScene::Draw() {
 
 			model_->Draw(*worldTransformBlock, camera_);
 			player_->Draw();
+			botton_->Draw();
+			botton2_->Draw();
+			mirror_->Draw();
+			// スカイドームの描画
+			skydome_->Draw();
 		}
 	}
 	// model_->Draw(worldTransform_, camera_);
@@ -186,30 +196,126 @@ void GameScene::Draw() {
 
 void GameScene::CheckAllCollisions() {
 #pragma region 自キャラと敵キャラの当たり判定
-	//{
-	//	// 判定対象1と2の座標
-	//	AABB aabb1, aabb2;
+	{
+		// 判定対象1と2の座標
+		AABB aabb1, aabb2;
+		AABB aabb3, aabb4;
 
-	//	// 自キャラの座標
-	//	aabb1 = player_->GetAABB();
+		// 自キャラの座標
+		aabb1 = player_->GetAABB();
+		aabb2 = botton_->GetAABB();
 
-	//	// 要素数
-	//	uint32_t kNumBlockVirtical = mapChipField_->GetNumBlockVirtical();
-	//	uint32_t kNumBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+		if (IsCollision(aabb1, aabb2)) {
+			player_->OnCollision(botton_, mirror_->GetIsHit());
+			botton_->OnCollision(player_);
+		}
 
-	//	// 自キャラと敵弾すべての当たり判定
-	//	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-	//		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-	//			aabb2=
-	//			// AABB同士の交差判定
-	//			if (IsCollision(aabb1, aabb2)) {
-	//				// 自キャラの衝突時コールバックを呼び出す
-	//				player_->OnCollision(mapChipField_);
-	//				// 敵弾の衝突時コールバックを呼び出す
-	//				mapChipField_->OnCollision(player_);
-	//			}
-	//		}
-	//	}
-	//}
+		// 自キャラの座標
+		aabb3 = mirror_->GetAABB();
+		aabb4 = botton2_->GetAABB();
+
+		if (IsCollision(aabb3, aabb4)) {
+			mirror_->OnCollision(botton2_, player_->GetIsHit());
+			botton2_->OnCollision(mirror_);
+		}
+	}
 #pragma endregion
+}
+
+void GameScene::ChangePhase() {
+	switch (phase_) {
+	case GameScene::Phase::kPlay:
+		player_->Update();
+		botton_->Update();
+		botton2_->Update();
+		mirror_->Update();
+		skydome_->Update();
+
+		CheckAllCollisions();
+
+		// ブロックの更新
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+				// 04/24 02_02の更新から始める
+
+				if (!worldTransformBlock) {
+					continue;
+				}
+
+				worldTransformBlock->UpdateMatrix();
+			}
+		}
+#ifdef _DEBUG
+		if (input_->TriggerKey(DIK_0)) {
+			isDebugCameraActive_ = !isDebugCameraActive_;
+		}
+#endif // DEBUG
+       // カメラの処理
+		if (isDebugCameraActive_) {
+			debugCamera_->Update();
+
+			// デバックカメラのビュー行列
+			camera_.matView = debugCamera_->GetCamera().matView;
+			// デバックカメラのプロジェクション行列
+			camera_.matProjection = debugCamera_->GetCamera().matProjection;
+		} else {
+			//  ビュープロジェクション行列の転送
+			camera_.TransferMatrix();
+		}
+		worldTransform_.TransferMatrix();
+
+		if (player_->IsAlive() == false) {
+			phase_ = Phase::kDeath;
+			//
+			// const Vector3 deathParticlePosition = player_->GetWorldPosition();
+
+			// goalParticles_ = new GoalParticles;
+			// Vector3 position = player_->GetWorldPosition();
+			// goalParticles_->Initialize(modelGoalParticle_, &camera_, position);
+		}
+		break;
+	case GameScene::Phase::kDeath:
+		botton_->Update();
+		botton2_->Update();
+		skydome_->Update();
+
+		CheckAllCollisions();
+
+		// ブロックの更新
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+				// 04/24 02_02の更新から始める
+
+				if (!worldTransformBlock) {
+					continue;
+				}
+
+				worldTransformBlock->UpdateMatrix();
+			}
+		}
+#ifdef _DEBUG
+		if (input_->TriggerKey(DIK_0)) {
+			isDebugCameraActive_ = !isDebugCameraActive_;
+		}
+#endif // DEBUG
+       // カメラの処理
+		if (isDebugCameraActive_) {
+			debugCamera_->Update();
+
+			// デバックカメラのビュー行列
+			camera_.matView = debugCamera_->GetCamera().matView;
+			// デバックカメラのプロジェクション行列
+			camera_.matProjection = debugCamera_->GetCamera().matProjection;
+		} else {
+			//  ビュープロジェクション行列の転送
+			camera_.TransferMatrix();
+		}
+		worldTransform_.TransferMatrix();
+
+		//if (player_->IsAlive()==false && mirror_->IsAlive()==false) {
+			finished_ = true;
+		//}
+
+		break;
+	}
 }

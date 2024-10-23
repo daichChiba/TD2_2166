@@ -72,6 +72,9 @@ public: // メンバ関数
 	/// <returns>トリガーか</returns>
 	bool TriggerKey(BYTE keyNumber) const;
 
+	bool ReleseKey(BYTE keyNumber) const;
+
+
 	/// <summary>
 	/// 全キー情報取得
 	/// </summary>
@@ -97,6 +100,7 @@ public: // メンバ関数
 	/// <param name="buttonNumber">マウスボタン番号(0:左,1:右,2:中,3~7:拡張マウスボタン)</param>
 	/// <returns>トリガーか</returns>
 	bool IsTriggerMouse(int32_t buttonNumber) const;
+
 
 	/// <summary>
 	/// マウス移動量を取得

@@ -106,11 +106,18 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Botton.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GoalParticles.cpp" />
+    <ClCompile Include="InputEx.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="MathUtilityForText.cpp" />
+    <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Skydome.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WorldTransformEx.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,10 +197,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="Botton.h" />
+    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="GoalParticles.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="MathUtilityForText.h" />
+    <ClInclude Include="Mirror.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Skydome.h" />
+    <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

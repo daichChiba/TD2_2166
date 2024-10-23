@@ -3,15 +3,12 @@
 using namespace KamataEngine;
 #include "AABB.h"
 #include "MapChipField.h"
-#include"MathUtilityForText.h"
-class MapChipField;
+#include "MathUtilityForText.h"
+class Player;
 class Botton;
 
-enum class LRDirection { kRight, kLeft };
+class Mirror {
 
-
-
-class Player {
 public:
 	/// <summary>
 	/// 初期化
@@ -19,13 +16,12 @@ public:
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Initialize(Model* model, Camera* camera_, const Vector3& pos);
+	void Initialize(Model* model, Camera* camera, const Vector3& pos);
 
 	/// <summary>
 	/// 更新
 	/// <summary>
 	void Update();
-
 
 	/// <summary>
 	/// 描画
@@ -34,14 +30,7 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
-	LRDirection lrDirection_ = LRDirection::kRight;
-
-
 	void InputMove();
-	
-	void AnimateTurn();
-
-
 
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
@@ -50,15 +39,15 @@ public:
 	AABB GetAABB();
 
 	//// 衝突応答
-	void OnCollision(const Botton* botton,bool isMirrorHit);
+	void OnCollision(const Botton* botton, bool isPlayerHit);
 
-	//スイッチと当たったか
+	// スイッチと当たったか
 	bool GetIsHit() { return isHit_; }
 
 	bool IsAlive() { return isAive; }
 
 private:
-		// ワールド変換データ
+	// ワールド変換データ
 	WorldTransform worldTransform_;
 
 	// モデル
@@ -94,5 +83,4 @@ private:
 	bool isAive = true;
 
 	bool isHit_ = false;
-	//bool isBlockHit_=false;
 };
